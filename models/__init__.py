@@ -4,11 +4,18 @@ from os import getenv
 
 if getenv("HBNB_TYPE_STORAGE") == "db":
     from models.engine.db_storage import DBStorage
-    storage = DBStorage()
+    try:
+      storage = DBStorage()
+    except Exception:
+       print("Can't connect to DB")
 else:
     from models.engine.file_storage import FileStorage
-    storage = FileStorage()
+    try:
+      storage = FileStorage()
+    except Exception:
+        print("Can't connect to FileStorage")
+
 try:
   storage.reload()
 except Exception:
-   pass
+   print("Error with reload")
