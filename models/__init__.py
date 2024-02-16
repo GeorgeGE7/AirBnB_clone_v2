@@ -1,21 +1,14 @@
 #!/usr/bin/python3
-"""This module instantiates an object of class FileStorage"""
+"""
+Instantiates a storage instenses.
+"""
 from os import getenv
+
 
 if getenv("HBNB_TYPE_STORAGE") == "db":
     from models.engine.db_storage import DBStorage
-    try:
-      storage = DBStorage()
-    except Exception:
-       print("Can't connect to DB")
+    storage = DBStorage()
 else:
     from models.engine.file_storage import FileStorage
-    try:
-      storage = FileStorage()
-    except Exception:
-        print("Can't connect to FileStorage")
-
-try:
-  storage.reload()
-except Exception:
-   print("Error with reload")
+    storage = FileStorage()
+storage.reload()
