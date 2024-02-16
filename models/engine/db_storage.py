@@ -62,7 +62,7 @@ class DBStorage():
         Args:
             obj (object): new object
         """
-        if self and obj:
+        if obj:
           self.__session.add(obj)
           self.__session.commit()
 
