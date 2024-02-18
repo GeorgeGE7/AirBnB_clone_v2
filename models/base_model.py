@@ -29,22 +29,24 @@ class BaseModel:
             self.created_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
         if kwargs:
-
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
-
-            del kwargs['__class__']
-            self.__dict__.update(kwargs)
+            date_formate = "%Y-%m-%dT%H:%M:%S.%f"
+            for k, v in kwargs.items():
+                if k == "created_at" or k == "updated_at":
+                    v = datetime.strptime(v, date_formate)
+                if hasattr(self, k):
+                    setattr(self, k, v)
 
     def __str__(self):
-        """Returns a string representation of the instance"""
+        """Function to make the obj string
+
+        Returns:
+            String: Object as a string
+        """
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        return f'[{cls}] ({self.id}) {self.__dict__}'
 
     def save(self):
-        """_summary_
+        """To save the new objs
         """
         from models import storage
         self.updated_at = datetime.utcnow()
@@ -52,22 +54,25 @@ class BaseModel:
         storage.save()
 
     def to_dict(self):
-        """Convert instance into dict format"""
-        dictionary = {}
-        dictionary.update(self.__dict__)
-        dictionary.update({'__class__':
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
+        new_dict = {}
+        new_dict.update(self.__dict__)
+        new_dict.update({'__class__':
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
+        new_dict['created_at'] = self.created_at.isoformat()
+        new_dict['updated_at'] = self.updated_at.isoformat()
         try:
-            del dictionary["_sa_instance_state"]
-        except KeyError:
+            del new_dict["_sa_instance_state"]
+        except Exception:
             pass
-        return dictionary
+        return new_dict
 
     def delete(self):
-        """
-        
+        """Function that delete an obj
         """
         from models import storage
         storage.delete(self)
