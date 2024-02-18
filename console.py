@@ -1,11 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
-Module for console
+main prrroject module
 """
-import cmd
-import re
-import shlex
 import ast
+import shlex
+import re
+import cmd
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -17,36 +17,36 @@ from models.city import City
 
 
 
-def split_curly_braces(e_arg):
+def split_dict_brk(split_cmd):
     """
     Splits the curly braces for the update method
     """
-    curly_braces = re.search(r"\{(.*?)\}", e_arg)
+    dict_brk = re.search(r"\{(.*?)\}", split_cmd)
 
-    if curly_braces:
-        id_with_comma = shlex.split(e_arg[:curly_braces.span()[0]])
-        id = [i.strip(",") for i in id_with_comma][0]
+    if dict_brk:
+        splited_id = shlex.split(split_cmd[:dict_brk.span()[0]])
+        id = [i.strip(",") for i in splited_id][0]
 
-        str_data = curly_braces.group(1)
+        string_info = dict_brk.group(1)
         try:
-            arg_dict = ast.literal_eval("{" + str_data + "}")
+            the_param = ast.literal_eval("{" + string_info + "}")
         except Exception:
             print("**  invalid dictionary format **")
             return
-        return id, arg_dict
+        return id, the_param
     else:
-        commands = e_arg.split(",")
-        if commands:
+        awamer = split_cmd.split(",")
+        if awamer:
             try:
-                id = commands[0]
+                id = awamer[0]
             except Exception:
                 return "", ""
             try:
-                attr_name = commands[1]
+                attr_name = awamer[1]
             except Exception:
                 return id, ""
             try:
-                attr_value = commands[2]
+                attr_value = awamer[2]
             except Exception:
                 return id, attr_name
             return f"{id}", f"{attr_name} {attr_value}"
@@ -56,7 +56,7 @@ class HBNBCommand(cmd.Cmd):
     HBNBCommand console class
     """
     prompt = "(hbnb) "
-    valid_classes = ["BaseModel", "User", "Amenity",
+    exist_clss = ["BaseModel", "User", "Amenity",
                      "Place", "Review", "State", "City"]
 
     def emptyline(self):
@@ -67,75 +67,75 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """
-        EOF (Ctrl+D) signal to exit the program.
+        Close the cli
         """
         return True
 
     def do_quit(self, arg):
         """
-        Quit command to exit the program.
+        Close the cli
         """
         return True
         
 
     def do_create(self, arg):
-        """
-        Create a new instance of BaseModel and save it to the JSON file.
-        Usage: create <class_name>
+        """Crreatew bew obj
+
+        Args:
+            arg (dict): attrebutes
         """
         try:
-            class_name = arg.split(" ")[0]
-            if len(class_name) == 0:
+            asm_cls = arg.split(" ")[0]
+            if len(asm_cls) == 0:
                 print("** class name missing **")
                 return
-            if class_name and class_name not in self.valid_classes:
+            if asm_cls and asm_cls not in self.exist_clss:
                 print("** class doesn't exist **")
                 return
 
-            kwargs = {}
-            commands = arg.split(" ")
-            for i in range(1, len(commands)):
+            all_args = {}
+            awamer = arg.split(" ")
+            for i in range(1, len(awamer)):
                 
-                key = commands[i].split("=")[0]
-                value = commands[i].split("=")[1]
-                #key, value = tuple(commands[i].split("="))
+                key = awamer[i].split("=")[0]
+                value = awamer[i].split("=")[1]
+                #key, value = tuple(awamer[i].split("="))
                 if value.startswith('"'):
                     value = value.strip('"').replace("_", " ")
                 else:
                     try:
                         value = eval(value)
-                    except (SyntaxError, NameError):
+                    except Exception:
                         continue
-                kwargs[key] = value
+                all_args[key] = value
 
-            if kwargs == {}:
-                new_instance = eval(class_name)()
+            if all_args == {}:
+                created_obj = eval(asm_cls)()
             else:
-                new_instance = eval(class_name)(**kwargs)
-            storage.new(new_instance)
-            print(new_instance.id)
+                created_obj = eval(asm_cls)(**all_args)
+            storage.new(created_obj)
+            print(created_obj.id)
             storage.save()
-        except ValueError:
-            print(ValueError)
+        except Exception:
             return
 
     def do_show(self, arg):
         """
         Show the string representation of an instance.
-        Usage: show <class_name> <id>
+        Usage: show <asm_cls> <id>
         """
-        commands = shlex.split(arg)
+        awamer = shlex.split(arg)
 
-        if len(commands) == 0:
+        if len(awamer) == 0:
             print("** class name missing **")
-        elif commands[0] not in self.valid_classes:
+        elif awamer[0] not in self.exist_clss:
             print("** class doesn't exist **")
-        elif len(commands) < 2:
+        elif len(awamer) < 2:
             print("** instance id missing **")
         else:
             objects = storage.all()
 
-            key = "{}.{}".format(commands[0], commands[1])
+            key = "{}.{}".format(awamer[0], awamer[1])
             if key in objects:
                 print(objects[key])
             else:
@@ -144,19 +144,19 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, arg):
         """
         Delete an instance based on the class name and id.
-        Usage: destroy <class_name> <id>
+        Usage: destroy <asm_cls> <id>
         """
-        commands = shlex.split(arg)
+        awamer = shlex.split(arg)
 
-        if len(commands) == 0:
+        if len(awamer) == 0:
             print("** class name missing **")
-        elif commands[0] not in self.valid_classes:
+        elif awamer[0] not in self.exist_clss:
             print("** class doesn't exist **")
-        elif len(commands) < 2:
+        elif len(awamer) < 2:
             print("** instance id missing **")
         else:
             objects = storage.all()
-            key = "{}.{}".format(commands[0], commands[1])
+            key = "{}.{}".format(awamer[0], awamer[1])
             if key in objects:
                 del objects[key]
                 storage.save()
@@ -171,16 +171,16 @@ class HBNBCommand(cmd.Cmd):
         """
         objects = storage.all()
 
-        commands = shlex.split(arg)
+        awamer = shlex.split(arg)
 
-        if len(commands) == 0:
+        if len(awamer) == 0:
             for key, value in objects.items():
                 print(str(value))
-        elif commands[0] not in self.valid_classes:
+        elif awamer[0] not in self.exist_clss:
             print("** class doesn't exist **")
         else:
             for key, value in objects.items():
-                if key.split('.')[0] == commands[0]:
+                if key.split('.')[0] == awamer[0]:
                     print(str(value))
         
     def do_count(self, arg):
@@ -190,16 +190,16 @@ class HBNBCommand(cmd.Cmd):
         """
         objects = storage.all()
 
-        commands = shlex.split(arg)
+        awamer = shlex.split(arg)
 
         if arg:
-            incoming_class_name = commands[0]
+            incoming_asm_cls = awamer[0]
         count = 0
 
-        if commands:
-            if incoming_class_name in self.valid_classes:
+        if awamer:
+            if incoming_asm_cls in self.exist_clss:
                 for obj in objects.values():
-                    if obj.__class__.__name__ == incoming_class_name:
+                    if obj.__class__.__name__ == incoming_asm_cls:
                         count += 1
                 print(count)
             else:
@@ -210,59 +210,57 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """
         Update an instance by adding or updating an attribute.
-        Usage: update <class_name> <id> <attribute_name> "<attribute_value>"
+        Usage: update <asm_cls> <id> <attribute_name> "<attribute_value>"
         """
-        commands = shlex.split(arg)
+        awamer = shlex.split(arg)
 
-        if len(commands) == 0:
+        if len(awamer) == 0:
             print("** class name missing **")
-        elif commands[0] not in self.valid_classes:
+        elif awamer[0] not in self.exist_clss:
             print("** class doesn't exist **")
-        elif len(commands) < 2:
+        elif len(awamer) < 2:
             print("** instance id missing **")
         else:
             objects = storage.all()
 
-            key = "{}.{}".format(commands[0], commands[1])
+            key = "{}.{}".format(awamer[0], awamer[1])
             if key not in objects:
                 print("** no instance found **")
-            elif len(commands) < 3:
+            elif len(awamer) < 3:
                 print("** attribute name missing **")
-            elif len(commands) < 4:
+            elif len(awamer) < 4:
                 print("** value missing **")
             else:
                 obj = objects[key]
-                curly_braces = re.search(r"\{(.*?)\}", arg)
+                dict_brk = re.search(r"\{(.*?)\}", arg)
 
-                if curly_braces:
+                if dict_brk:
                     # added to catch errors
                     try:
-                        str_data = curly_braces.group(1)
+                        string_info = dict_brk.group(1)
 
-                        arg_dict = ast.literal_eval("{" + str_data + "}")
+                        the_param = ast.literal_eval("{" + string_info + "}")
 
-                        attribute_names = list(arg_dict.keys())
-                        attribute_values = list(arg_dict.values())
-                        # added to catch exception
+                        the_key = list(the_param.keys())
+                        attribute_values = list(the_param.values())
                         try:
-                            attr_name1 = attribute_names[0]
-                            attr_value1 = attribute_values[0]
-                            setattr(obj, attr_name1, attr_value1)
+                            key_one = the_key[0]
+                            val_one = attribute_values[0]
+                            setattr(obj, key_one, val_one)
                         except Exception:
                             pass
                         try:
-                            # added to catch exception
-                            attr_name2 = attribute_names[1]
+                            key_a = the_key[1]
                             attr_value2 = attribute_values[1]
-                            setattr(obj, attr_name2, attr_value2)
+                            setattr(obj, key_a, attr_value2)
                         except Exception:
                             pass
                     except Exception:
                         pass
                 else:
 
-                    attr_name = commands[2]
-                    attr_value = commands[3]
+                    attr_name = awamer[2]
+                    attr_value = awamer[3]
 
                     try:
                         attr_value = eval(attr_value)
@@ -278,15 +276,15 @@ class HBNBCommand(cmd.Cmd):
         """
         arg_list = arg.split('.')
 
-        cls_nm = arg_list[0]  # incoming class name
+        cls_nm = arg_list[0]
 
-        command = arg_list[1].split('(')
+        amr = arg_list[1].split('(')
 
-        cmd_met = command[0]  # incoming command method
+        cmd_met = amr[0]
 
-        e_arg = command[1].split(')')[0]  # extra arguments
+        split_cmd = amr[1].split(')')[0]
 
-        method_dict = {
+        all_meth = {
                 'all': self.do_all,
                 'show': self.do_show,
                 'destroy': self.do_destroy,
@@ -294,24 +292,24 @@ class HBNBCommand(cmd.Cmd):
                 'count': self.do_count
                 }
 
-        if cmd_met in method_dict.keys():
+        if cmd_met in all_meth.keys():
             if cmd_met != "update":
-                return method_dict[cmd_met]("{} {}".format(cls_nm, e_arg))
+                return all_meth[cmd_met]("{} {}".format(cls_nm, split_cmd))
             else:
                 if not cls_nm:
                     print("** class name missing **")
                     return
                 try:
-                    obj_id, arg_dict = split_curly_braces(e_arg)
+                    inst_id, the_param = split_dict_brk(split_cmd)
                 except Exception:
                     pass
                 try:
-                    call = method_dict[cmd_met]
-                    return call("{} {} {}".format(cls_nm, obj_id, arg_dict))
+                    invo = all_meth[cmd_met]
+                    return invo(f"{cls_nm} {inst_id} {the_param}")
                 except Exception:
                     pass
         else:
-            print("*** Unknown syntax: {}".format(arg))
+            print(f"*** Unknown syntax: {arg}")
             return False
     
 
