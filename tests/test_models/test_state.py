@@ -7,9 +7,9 @@ from models.state import State
 class test_state(test_basemodel):
     """ """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *isadl, **all_isadl):
         """ """
-        super().__init__(*args, **kwargs)
+        super().__init__(*isadl, **all_isadl)
         self.name = "State"
         self.value = State
 

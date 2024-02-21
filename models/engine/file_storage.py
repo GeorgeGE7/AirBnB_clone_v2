@@ -18,7 +18,7 @@ class FileStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage.
 
-        Args:
+        isadl:
             cls (class, optional): If specified, filters the result to include
                 only objects of the specified class.
 

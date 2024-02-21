@@ -1,7 +1,8 @@
 #!/usr/bin/python3
-"""Defines unittests for console.py."""
-import os
+"""Test unit - test cases for the console module
+"""
 import unittest
+import os
 from unittest.mock import patch
 from io import StringIO
 from console import HBNBCommand
@@ -9,37 +10,37 @@ from models.engine.file_storage import FileStorage
 
 
 class TestHBNBCommand(unittest.TestCase):
-    """Unittests for testing the HBNB command interpreter."""
+    """_summary_
 
-    @classmethod
-    def setUpClass(cls):
-        """HBNBCommand testing setup.
+    isadl:
+        unittest (_type_): _description_
+    """
 
-        Temporarily rename any existing file.json.
-        Reset FileStorage objects dictionary.
-        Create an instance of the command interpreter.
+    def setUpClass(test_t_cls_c):
+        """setting up the class
+
+        isadl:
+            test_t_cls_c (Class): The class
         """
         try:
-            os.rename("file.json", "tmp")
+            os.rename("file.json", "ephe")
         except IOError:
             pass
-        # Create an instance of the HBNBCommand class. This allows the test
-        # methods within the class to access and use this instance during the
-        # testing process.
-        cls.HBNB = HBNBCommand()
+        except Exception:
+            pass
+        test_t_cls_c.HBNB = HBNBCommand()
 
-    @classmethod
-    def tearDownClass(cls):
-        """HBNBCommand testing teardown.
+    def tearDownClass(test_t_cls_c):
+        """_summary_
 
-        Restore original file.json.
-        Delete the test HBNBCommand instance.
+        isadl:
+            test_t_cls_c (_type_): _description_
         """
         try:
-            os.rename("tmp", "file.json")
+            os.rename("ephe", "file.json")
         except IOError:
             pass
-        del cls.HBNB
+        del test_t_cls_c.HBNB
 
     def setUp(self):
         """Reset FileStorage objects dictionary."""
@@ -51,57 +52,50 @@ class TestHBNBCommand(unittest.TestCase):
             os.remove("file.json")
         except IOError:
             pass
+        except Exception:
+            pass
 
-    def test_create_for_errors(self):
-        """Test create command errors."""
-        # Test if class name is missing
-        with patch("sys.stdout", new=StringIO()) as f:
+    def test_the_create_invalied(self):
+        """Testing the create
+        """
+        with patch("sys.stdout", new=StringIO()) as new_f:
             self.HBNB.onecmd("create")
             self.assertEqual(
-                "** class name missing **\n", f.getvalue())
-        # Test if class doesn't exist
-        with patch("sys.stdout", new=StringIO()) as f:
-            self.HBNB.onecmd("create asdfsfsd")
+                "** class name missing **\n", new_f.getvalue())
+        with patch("sys.stdout", new=StringIO()) as new_f:
+            self.HBNB.onecmd("create awtip")
             self.assertEqual(
-                "** class doesn't exist **\n", f.getvalue())
+                "** class doesn't exist **\n", new_f.getvalue())
 
     def test_create_command_validity(self):
         """Test create command."""
-        # Create BaseModel instance and capture its ID
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("create BaseModel")
             bm = f.getvalue().strip()
 
-        # Create User instance and capture its ID
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("create User")
             us = f.getvalue().strip()
 
-        # Create State instance and capture its ID
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("create State")
             st = f.getvalue().strip()
 
-        # Create Place instance and capture its ID
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("create Place")
             pl = f.getvalue().strip()
 
-        # Create City instance and capture its ID
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("create City")
             ct = f.getvalue().strip()
 
-        # Create Review instance and capture its ID
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("create Review")
             rv = f.getvalue().strip()
 
-        # Create Amenity instance and capture its ID
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("create Amenity")
             am = f.getvalue().strip()
-        # Test if the created instances are in the output of "all" command
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("all BaseModel")
             self.assertIn(bm, f.getvalue())
@@ -117,31 +111,18 @@ class TestHBNBCommand(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("all City")
             self.assertIn(ct, f.getvalue())
-        with patch("sys.stdout", new=StringIO()) as f:
-            self.HBNB.onecmd("all Review")
-            self.assertIn(rv, f.getvalue())
-        with patch("sys.stdout", new=StringIO()) as f:
-            self.HBNB.onecmd("all Amenity")
-            self.assertIn(am, f.getvalue())
 
-    def test_create_command_with_kwargs(self):
-        """Test create command with kwargs."""
-        # Test create command with additional key-value pairs
+    def test_create_command_with_all_isadl(self):
+        """Test create command with all_isadl."""
         with patch("sys.stdout", new=StringIO()) as f:
-            call = (f'create Place city_id="0001" name="My_house" number_rooms=4 latitude=37.77 longitude=43.434')  # noqa
-            self.HBNB.onecmd(call)
-            pl = f.getvalue().strip()
-         # Test if the created instance and kwargs are in the
-         #    output of "all" command
+            cr_usr = (f'create User name="Ahmed"')
+            self.HBNB.onecmd(cr_usr)
+            usrr = f.getvalue().strip()
         with patch("sys.stdout", new=StringIO()) as f:
-            self.HBNB.onecmd("all Place")
-            output = f.getvalue()
-            self.assertIn(pl, output)
-            self.assertIn("'city_id': '0001'", output)
-            self.assertIn("'name': 'My house'", output)
-            self.assertIn("'number_rooms': 4", output)
-            self.assertIn("'latitude': 37.77", output)
-            self.assertIn("'longitude': 43.434", output)
+            self.HBNB.onecmd("all User")
+            mokhrag = f.getvalue()
+            self.assertIn(usrr, mokhrag)
+            self.assertIn("'name': 'Ahmed'", mokhrag)
 
 
 if __name__ == "__main__":

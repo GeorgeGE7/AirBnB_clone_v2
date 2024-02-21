@@ -35,18 +35,18 @@ def split_dict_brk(split_cmd):
             return
         return id, the_param
     else:
-        awamer = split_cmd.split(",")
-        if awamer:
+        t_cmdsss = split_cmd.split(",")
+        if t_cmdsss:
             try:
-                id = awamer[0]
+                id = t_cmdsss[0]
             except Exception:
                 return "", ""
             try:
-                attr_name = awamer[1]
+                attr_name = t_cmdsss[1]
             except Exception:
                 return id, ""
             try:
-                attr_value = awamer[2]
+                attr_value = t_cmdsss[2]
             except Exception:
                 return id, attr_name
             return f"{id}", f"{attr_name} {attr_value}"
@@ -81,7 +81,7 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """Crreatew bew obj
 
-        Args:
+        isadl:
             arg (dict): attrebutes
         """
         try:
@@ -93,26 +93,25 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
                 return
 
-            all_args = {}
-            awamer = arg.split(" ")
-            for i in range(1, len(awamer)):
+            all_isadl = {}
+            t_cmdsss = arg.split(" ")
+            for j in range(1, len(t_cmdsss)):
                 
-                key = awamer[i].split("=")[0]
-                value = awamer[i].split("=")[1]
-                #key, value = tuple(awamer[i].split("="))
-                if value.startswith('"'):
-                    value = value.strip('"').replace("_", " ")
+                key = t_cmdsss[j].split("=")[0]
+                kyema = t_cmdsss[j].split("=")[1]
+                if kyema.startswith('"'):
+                    kyema = kyema.strip('"').replace("_", " ")
                 else:
                     try:
-                        value = eval(value)
+                        kyema = eval(kyema)
                     except Exception:
                         continue
-                all_args[key] = value
+                all_isadl[key] = kyema
 
-            if all_args == {}:
+            if all_isadl == {}:
                 created_obj = eval(asm_cls)()
             else:
-                created_obj = eval(asm_cls)(**all_args)
+                created_obj = eval(asm_cls)(**all_isadl)
             storage.new(created_obj)
             print(created_obj.id)
             storage.save()
@@ -124,18 +123,18 @@ class HBNBCommand(cmd.Cmd):
         Show the string representation of an instance.
         Usage: show <asm_cls> <id>
         """
-        awamer = shlex.split(arg)
+        t_cmdsss = shlex.split(arg)
 
-        if len(awamer) == 0:
+        if len(t_cmdsss) == 0:
             print("** class name missing **")
-        elif awamer[0] not in self.exist_clss:
+        elif t_cmdsss[0] not in self.exist_clss:
             print("** class doesn't exist **")
-        elif len(awamer) < 2:
+        elif len(t_cmdsss) < 2:
             print("** instance id missing **")
         else:
             objects = storage.all()
 
-            key = "{}.{}".format(awamer[0], awamer[1])
+            key = "{}.{}".format(t_cmdsss[0], t_cmdsss[1])
             if key in objects:
                 print(objects[key])
             else:
@@ -146,17 +145,17 @@ class HBNBCommand(cmd.Cmd):
         Delete an instance based on the class name and id.
         Usage: destroy <asm_cls> <id>
         """
-        awamer = shlex.split(arg)
+        t_cmdsss = shlex.split(arg)
 
-        if len(awamer) == 0:
+        if len(t_cmdsss) == 0:
             print("** class name missing **")
-        elif awamer[0] not in self.exist_clss:
+        elif t_cmdsss[0] not in self.exist_clss:
             print("** class doesn't exist **")
-        elif len(awamer) < 2:
+        elif len(t_cmdsss) < 2:
             print("** instance id missing **")
         else:
             objects = storage.all()
-            key = "{}.{}".format(awamer[0], awamer[1])
+            key = "{}.{}".format(t_cmdsss[0], t_cmdsss[1])
             if key in objects:
                 del objects[key]
                 storage.save()
@@ -171,17 +170,17 @@ class HBNBCommand(cmd.Cmd):
         """
         objects = storage.all()
 
-        awamer = shlex.split(arg)
+        t_cmdsss = shlex.split(arg)
 
-        if len(awamer) == 0:
-            for key, value in objects.items():
-                print(str(value))
-        elif awamer[0] not in self.exist_clss:
+        if len(t_cmdsss) == 0:
+            for key, kyema in objects.items():
+                print(str(kyema))
+        elif t_cmdsss[0] not in self.exist_clss:
             print("** class doesn't exist **")
         else:
-            for key, value in objects.items():
-                if key.split('.')[0] == awamer[0]:
-                    print(str(value))
+            for key, kyema in objects.items():
+                if key.split('.')[0] == t_cmdsss[0]:
+                    print(str(kyema))
         
     def do_count(self, arg):
         """
@@ -190,13 +189,13 @@ class HBNBCommand(cmd.Cmd):
         """
         objects = storage.all()
 
-        awamer = shlex.split(arg)
+        t_cmdsss = shlex.split(arg)
 
         if arg:
-            incoming_asm_cls = awamer[0]
+            incoming_asm_cls = t_cmdsss[0]
         count = 0
 
-        if awamer:
+        if t_cmdsss:
             if incoming_asm_cls in self.exist_clss:
                 for obj in objects.values():
                     if obj.__class__.__name__ == incoming_asm_cls:
@@ -212,23 +211,23 @@ class HBNBCommand(cmd.Cmd):
         Update an instance by adding or updating an attribute.
         Usage: update <asm_cls> <id> <attribute_name> "<attribute_value>"
         """
-        awamer = shlex.split(arg)
+        t_cmdsss = shlex.split(arg)
 
-        if len(awamer) == 0:
+        if len(t_cmdsss) == 0:
             print("** class name missing **")
-        elif awamer[0] not in self.exist_clss:
+        elif t_cmdsss[0] not in self.exist_clss:
             print("** class doesn't exist **")
-        elif len(awamer) < 2:
+        elif len(t_cmdsss) < 2:
             print("** instance id missing **")
         else:
             objects = storage.all()
 
-            key = "{}.{}".format(awamer[0], awamer[1])
+            key = "{}.{}".format(t_cmdsss[0], t_cmdsss[1])
             if key not in objects:
                 print("** no instance found **")
-            elif len(awamer) < 3:
+            elif len(t_cmdsss) < 3:
                 print("** attribute name missing **")
-            elif len(awamer) < 4:
+            elif len(t_cmdsss) < 4:
                 print("** value missing **")
             else:
                 obj = objects[key]
@@ -259,8 +258,8 @@ class HBNBCommand(cmd.Cmd):
                         pass
                 else:
 
-                    attr_name = awamer[2]
-                    attr_value = awamer[3]
+                    attr_name = t_cmdsss[2]
+                    attr_value = t_cmdsss[3]
 
                     try:
                         attr_value = eval(attr_value)

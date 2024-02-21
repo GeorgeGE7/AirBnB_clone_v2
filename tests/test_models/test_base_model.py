@@ -11,9 +11,9 @@ import os
 class test_basemodel(unittest.TestCase):
     """ """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *isadl, **all_isadl):
         """ """
-        super().__init__(*args, **kwargs)
+        super().__init__(*isadl, **all_isadl)
         self.name = 'BaseModel'
         self.value = BaseModel
 
@@ -32,14 +32,14 @@ class test_basemodel(unittest.TestCase):
         i = self.value()
         self.assertEqual(type(i), self.value)
 
-    def test_kwargs(self):
+    def test_all_isadl(self):
         """ """
         i = self.value()
         copy = i.to_dict()
         new = BaseModel(**copy)
         self.assertFalse(new is i)
 
-    def test_kwargs_int(self):
+    def test_all_isadl_int(self):
         """ """
         i = self.value()
         copy = i.to_dict()
@@ -68,13 +68,13 @@ class test_basemodel(unittest.TestCase):
         n = i.to_dict()
         self.assertEqual(i.to_dict(), n)
 
-    def test_kwargs_none(self):
+    def test_all_isadl_none(self):
         """ """
         n = {None: None}
         with self.assertRaises(TypeError):
             new = self.value(**n)
 
-    def test_kwargs_one(self):
+    def test_all_isadl_one(self):
         """ """
         n = {'Name': 'test'}
         with self.assertRaises(KeyError):

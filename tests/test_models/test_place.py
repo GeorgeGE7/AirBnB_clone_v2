@@ -7,63 +7,75 @@ from models.place import Place
 class test_Place(test_basemodel):
     """ """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *isadl, **all_isadl):
         """ """
-        super().__init__(*args, **kwargs)
+        super().__init__(*isadl, **all_isadl)
         self.name = "Place"
         self.value = Place
 
-    def test_city_id(self):
+    def test_id_of_the_city(self):
         """ """
-        new = self.value()
-        self.assertEqual(type(new.city_id), str)
+        the_clss_l = self.value()
+        self.assertEqual(type(the_clss_l.city_id), str)
 
     def test_user_id(self):
         """ """
-        new = self.value()
-        self.assertEqual(type(new.user_id), str)
+        the_clss_l = self.value()
+        self.assertEqual(type(the_clss_l.user_id), str)
 
-    def test_name(self):
+    def test_asm(self):
         """ """
-        new = self.value()
-        self.assertEqual(type(new.name), str)
+        the_clss_l = self.value()
+        self.assertNotEqual(type(the_clss_l.name), int)
+        self.assertEqual(type(the_clss_l.name), str)
 
-    def test_description(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.description), str)
+    def test_info(self):
+        """_summary_
+        """
+        the_clss_l = self.value()
+        self.assertEqual(type(the_clss_l.description), str)
 
     def test_number_rooms(self):
         """ """
-        new = self.value()
-        self.assertEqual(type(new.number_rooms), int)
+        the_clss_l = self.value()
+        self.assertNotEqual(type(the_clss_l.number_rooms), str)
+        self.assertEqual(type(the_clss_l.number_rooms), int)
 
     def test_number_bathrooms(self):
         """ """
-        new = self.value()
-        self.assertEqual(type(new.number_bathrooms), int)
+        the_clss_l = self.value()
+        self.assertNotEqual(type(the_clss_l.number_bathrooms), str)
+        self.assertEqual(type(the_clss_l.number_bathrooms), int)
 
-    def test_max_guest(self):
+    def test_the_guts(self):
         """ """
-        new = self.value()
-        self.assertEqual(type(new.max_guest), int)
+        the_clss_l = self.value()
+        self.assertNotEqual(type(the_clss_l.max_guest), str)
+        self.assertEqual(type(the_clss_l.max_guest), int)
 
-    def test_price_by_night(self):
+    def test_ppn(self):
         """ """
-        new = self.value()
-        self.assertEqual(type(new.price_by_night), int)
+        the_clss_l = self.value()
+        self.assertNotEqual(type(the_clss_l.price_by_night), float)
+        self.assertEqual(type(the_clss_l.price_by_night), int)
 
-    def test_latitude(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.latitude), float)
+    def test_le(self):
+        """_summary_
+        """
+        the_clss_l = self.value()
+        self.assertNotEqual(type(the_clss_l.latitude), int)
+        self.assertEqual(type(the_clss_l.latitude), float)
 
-    def test_longitude(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.latitude), float)
+    def test_the_ltde(self):
+        """_summary_
+        """
+        the_clss_l = self.value()
+        self.assertNotEqual(type(the_clss_l.latitude), str)
+        self.assertEqual(type(the_clss_l.latitude), float)
 
     def test_amenity_ids(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.amenity_ids), list)
+        """_summary_
+        """
+        the_clss_l = self.value()
+        self.assertNotEqual(type(the_clss_l.amenity_ids), str)
+        self.assertEqual(type(the_clss_l.amenity_ids), list)

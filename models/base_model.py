@@ -22,31 +22,31 @@ class BaseModel:
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
-    def __init__(self, *args, **kwargs):
-        """Instantiates a new base model that will be inherted"""
+    def __init__(self, *isadl, **all_isadl):
+        """Create ot update the init
+        """
         self.id = str(uuid.uuid4())
-        if not kwargs:
-            self.created_at = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
-        if kwargs:
-            date_formate = "%Y-%m-%dT%H:%M:%S.%f"
-            for k, v in kwargs.items():
-                if k == "created_at" or k == "updated_at":
-                    v = datetime.strptime(v, date_formate)
-                if hasattr(self, k):
-                    setattr(self, k, v)
+        self.created_at = datetime.utcnow()
+        self.updated_at = datetime.utcnow()
+        if all_isadl:
+            for t_atrr, atrr_value in all_isadl.items():
+                if t_atrr == "created_at" or t_atrr == "updated_at":
+                    atrr_value = datetime.strptime(atrr_value, "%Y-%m-%dT%H:%M:%S.%f")
+                if hasattr(self, t_atrr):
+                    setattr(self, t_atrr, atrr_value)
 
     def __str__(self):
-        """Function to make the obj string
+        """string for an object
 
         Returns:
-            String: Object as a string
+            string: string object represntation
         """
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return f'[{cls}] ({self.id}) {self.__dict__}'
+        string_rep = f'[{cls}] ({self.id}) {self.__dict__}'
+        return string_rep
 
     def save(self):
-        """To save the new objs
+        """To save
         """
         from models import storage
         self.updated_at = datetime.utcnow()
@@ -54,25 +54,27 @@ class BaseModel:
         storage.save()
 
     def to_dict(self):
-        """_summary_
+        """To dict function
 
         Returns:
-            _type_: _description_
+            dict: dict represntation
         """
-        new_dict = {}
-        new_dict.update(self.__dict__)
-        new_dict.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
-        new_dict['created_at'] = self.created_at.isoformat()
-        new_dict['updated_at'] = self.updated_at.isoformat()
+        dict_to_update_to_dict = {}
+        dict_to_update_to_dict.update(self.__dict__)
+        cls_val = (str(type(self)).split('.')[-1]).split('\'')[0]
+        dict_to_update_to_dict.update({'__class__': cls_val})
+        formated_created_at = self.created_at.isoformat()
+        formated_updated_at = self.updated_at.isoformat()
+        dict_to_update_to_dict['created_at'] = formated_created_at
+        dict_to_update_to_dict['updated_at'] = formated_updated_at
         try:
-            del new_dict["_sa_instance_state"]
+            del dict_to_update_to_dict["_sa_instance_state"]
         except Exception:
             pass
-        return new_dict
+        return dict_to_update_to_dict
 
     def delete(self):
-        """Function that delete an obj
+        """Delete object
         """
         from models import storage
         storage.delete(self)
