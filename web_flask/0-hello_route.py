@@ -18,6 +18,3 @@ def home():
         string: welcome message
     """
     return "Hello HBNB!"
-
-if __name__ == "__main__":
-    app.run()
