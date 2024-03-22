@@ -9,6 +9,8 @@ Returns:
 from flask import Flask
 
 app = Flask(__name__)
+"""init the app
+"""
 
 @app.route("/", strict_slashes=False)
 def home():
@@ -18,3 +20,6 @@ def home():
         string: welcome message
     """
     return "Hello HBNB!"
+
+if __name__ == "__main__":
+    app.run()
