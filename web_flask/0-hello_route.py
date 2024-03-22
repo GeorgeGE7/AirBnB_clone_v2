@@ -1,25 +1,16 @@
 #!/usr/bin/python3
-
-"""First Route
-
-Returns:
-    string: Welcome message
+"""
+first route and flask init
 """
 
 from flask import Flask
-
 app = Flask(__name__)
-"""init the app
-"""
 
-@app.route("/", strict_slashes=False)
+
+@app.route('/', strict_slashes=False)
 def home():
-    """Just the first route
+    """home route with simple string"""
+    return 'Hello HBNB!'
 
-    Returns:
-        string: welcome message
-    """
-    return "Hello HBNB!"
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000')
