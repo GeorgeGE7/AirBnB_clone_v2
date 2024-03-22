@@ -11,7 +11,7 @@ app = Flask(__name__)
 def home():
     """home route with simple string"""
     return 'Hello HBNB!'
-
+app.route("/hbnb", strict_slashes=False)
 def hbnb():
     """seconde route for hbnb"""
     return "HBNB"
