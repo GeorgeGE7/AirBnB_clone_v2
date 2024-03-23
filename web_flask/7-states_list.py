@@ -9,7 +9,7 @@ from models import storage
 app = Flask(__name__)
 
 @app.route('/states_list', strict_slashes=False)
-def states_list():
+def all_states():
     """renderr a page with states data in ordered way"""
     states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
     return render_template('7-states_list.html', states=states)
