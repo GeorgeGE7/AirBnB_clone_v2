@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<state_id>', strict_slashes=False)
-def states(state_id=None):
+def state_with_id(state_id=None):
     """get all states ordered..."""
     states = storage.all("State")
     if state_id:
