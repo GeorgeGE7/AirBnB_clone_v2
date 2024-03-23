@@ -3,7 +3,7 @@
 first route and flask init
 """
 
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/', strict_slashes=False)
@@ -42,6 +42,12 @@ def n_number_only(n):
     """display n for user oif it is an int only"""
     if isinstance(n, int):
         return f"{n} is a number"
+
+@app.route('/number_template/<int:n>', strict_slashes=False)
+def n_number_only(n):
+    """render template with n for user oif it is an int only"""
+    if isinstance(n, int):
+        return render_template('5-number.html', n=n)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000')
